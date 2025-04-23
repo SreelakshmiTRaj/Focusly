@@ -26,6 +26,8 @@ public class StudyPlan {
 
     @Enumerated(EnumType.STRING)
     private PlanStatus completionStatus;
+    
+    private Integer currentCourseIndex;
 
     public enum PlanStatus {
         NOT_STARTED,
@@ -88,4 +90,12 @@ public class StudyPlan {
 	public void setCompletionStatus(PlanStatus completionStatus) {
 		this.completionStatus = completionStatus;
 	}    
+	
+	 public Integer getCurrentCourseIndex() {
+	        return currentCourseIndex;
+	    }
+
+	    public void setCurrentCourseIndex(Integer currentCourseIndex) {
+	        this.currentCourseIndex = currentCourseIndex;
+	    }
 }

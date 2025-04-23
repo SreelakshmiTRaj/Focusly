@@ -23,6 +23,7 @@ public class StudyPlanService {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             studyPlan.setUser(user);
+            studyPlan.setCurrentCourseIndex(0); // Start at the first course
             return studyPlanRepository.save(studyPlan);
         } else {
             throw new RuntimeException("User not found with ID: " + userId);
@@ -37,6 +38,44 @@ public class StudyPlanService {
     // Get a specific study plan by ID
     public Optional<StudyPlan> getStudyPlanById(Long studyPlanId) {
         return studyPlanRepository.findById(studyPlanId);
+    }
+
+    // Check if user can move to the next course
+    public boolean canMoveToNextCourse(Long studyPlanId) {
+        Optional<StudyPlan> studyPlanOpt = studyPlanRepository.findById(studyPlanId);
+        if (studyPlanOpt.isPresent()) {
+            StudyPlan studyPlan = studyPlanOpt.get();
+            return studyPlan.getCompletionStatus() == StudyPlan.PlanStatus.COMPLETED;
+        }
+        return false;
+    }
+
+    // Move to the next course in the study plan
+    public StudyPlan moveToNextCourse(Long studyPlanId) {
+        Optional<StudyPlan> studyPlanOpt = studyPlanRepository.findById(studyPlanId);
+        if (studyPlanOpt.isPresent()) {
+            StudyPlan studyPlan = studyPlanOpt.get();
+            if (studyPlan.getCompletionStatus() == StudyPlan.PlanStatus.COMPLETED) {
+                int nextCourseIndex = studyPlan.getCurrentCourseIndex() + 1;
+                if (nextCourseIndex < studyPlan.getSubjects().size()) {
+                    studyPlan.setCurrentCourseIndex(nextCourseIndex);
+                    studyPlan.setCompletionStatus(StudyPlan.PlanStatus.NOT_STARTED);
+                    studyPlanRepository.save(studyPlan);
+                }
+            }
+        }
+        return studyPlanOpt.orElseThrow(() -> new RuntimeException("Study plan not found"));
+    }
+
+    // Mark current course as completed
+    public StudyPlan completeCurrentCourse(Long studyPlanId) {
+        Optional<StudyPlan> studyPlanOpt = studyPlanRepository.findById(studyPlanId);
+        if (studyPlanOpt.isPresent()) {
+            StudyPlan studyPlan = studyPlanOpt.get();
+            studyPlan.setCompletionStatus(StudyPlan.PlanStatus.COMPLETED);
+            studyPlanRepository.save(studyPlan);
+        }
+        return studyPlanOpt.orElseThrow(() -> new RuntimeException("Study plan not found"));
     }
 
     // Delete a study plan

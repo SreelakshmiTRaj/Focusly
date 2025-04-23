@@ -31,6 +31,22 @@ public class StudyPlanController {
         return studyPlanService.getStudyPlanById(studyPlanId);
     }
 
+    // Mark current course as completed
+    @PostMapping("/complete/{studyPlanId}")
+    public StudyPlan completeCurrentCourse(@PathVariable Long studyPlanId) {
+        return studyPlanService.completeCurrentCourse(studyPlanId);
+    }
+
+    // Move to the next course in the study plan
+    @PostMapping("/next/{studyPlanId}")
+    public StudyPlan moveToNextCourse(@PathVariable Long studyPlanId) {
+        if (studyPlanService.canMoveToNextCourse(studyPlanId)) {
+            return studyPlanService.moveToNextCourse(studyPlanId);
+        } else {
+            throw new RuntimeException("You need to complete the current course first.");
+        }
+    }
+
     // Delete a study plan
     @DeleteMapping("/delete/{studyPlanId}")
     public void deleteStudyPlan(@PathVariable Long studyPlanId) {
