@@ -11,5 +11,7 @@ public interface StudyTaskRepository extends JpaRepository<StudyTask, Long> {
     
     @Query("SELECT t FROM StudyTask t WHERE t.studyPlan.user.id = :userId AND t.completed = false ORDER BY t.dueDate ASC")
     List<StudyTask> findTopUncompletedTaskByUserIdOrderByDueDate(@Param("userId") Long userId);
+    
+    List<StudyTask> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description);
 
 }

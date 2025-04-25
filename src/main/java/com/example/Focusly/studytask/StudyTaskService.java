@@ -2,6 +2,7 @@ package com.example.Focusly.studytask;
 
 import com.example.Focusly.studyplan.StudyPlan;
 import com.example.Focusly.studyplan.StudyPlanRepository;
+import com.example.Focusly.progress.UserProgressService; // ⬅️ Add this
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class StudyTaskService {
 
     @Autowired
     private StudyPlanRepository studyPlanRepository;
+
+    @Autowired
+    private UserProgressService userProgressService; // ⬅️ Injected
 
     public StudyTask createTask(Long studyPlanId, StudyTask task) {
         Optional<StudyPlan> studyPlanOpt = studyPlanRepository.findById(studyPlanId);
@@ -42,6 +46,11 @@ public class StudyTaskService {
         StudyTask task = studyTaskRepository.findById(taskId)
             .orElseThrow(() -> new RuntimeException("Task not found"));
         task.setCompleted(true);
-        return studyTaskRepository.save(task);
+        StudyTask updatedTask = studyTaskRepository.save(task);
+
+        Long userId = task.getStudyPlan().getUser().getId();
+        userProgressService.updateProgress(userId, true);
+
+        return updatedTask;
     }
 }
