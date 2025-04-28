@@ -2,6 +2,7 @@ package com.example.Focusly.auth;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Focusly.user.User;
@@ -15,9 +16,13 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        userService.register(user);
-        return "User registered successfully!";
+    public ResponseEntity<String> register(@RequestBody User user) {
+        try {
+            userService.register(user);
+            return ResponseEntity.ok("User registered successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")

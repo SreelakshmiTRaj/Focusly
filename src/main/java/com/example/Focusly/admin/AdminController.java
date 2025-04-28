@@ -71,5 +71,7 @@ public class AdminController {
             progressRepository.save(progress);
         });
     }
+  
+
 }
 
