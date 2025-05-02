@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/studytask")
+@CrossOrigin(origins = "http://localhost:5173")
 public class StudyTaskController {
 
     @Autowired

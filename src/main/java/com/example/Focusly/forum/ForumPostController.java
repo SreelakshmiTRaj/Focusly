@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/forum")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ForumPostController {
 
     @Autowired

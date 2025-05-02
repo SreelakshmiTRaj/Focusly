@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/moodcheckin")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MoodCheckInController {
 
     @Autowired
