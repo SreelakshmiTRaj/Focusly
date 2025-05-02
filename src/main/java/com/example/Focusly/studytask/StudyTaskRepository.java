@@ -9,6 +9,8 @@ import java.util.List;
 public interface StudyTaskRepository extends JpaRepository<StudyTask, Long> {
     List<StudyTask> findByStudyPlanId(Long studyPlanId);
     
+    List<StudyTask> findAllByStudyPlanUserId(Long userId);
+    
     @Query("SELECT t FROM StudyTask t WHERE t.studyPlan.user.id = :userId AND t.completed = false ORDER BY t.dueDate ASC")
     List<StudyTask> findTopUncompletedTaskByUserIdOrderByDueDate(@Param("userId") Long userId);
     

@@ -15,7 +15,13 @@ public class Notification {
     private LocalDateTime timestamp;
     private boolean isRead;
 
-    // Getters and Setters
+    @Column(nullable = false)
+    private boolean isDeleted = false;  
+
+    private String type = "INFO";       
+
+    // Getters and setters
+
     public Long getId() {
         return id;
     }
@@ -55,5 +61,20 @@ public class Notification {
     public void setRead(boolean read) {
         isRead = read;
     }
-}
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+}

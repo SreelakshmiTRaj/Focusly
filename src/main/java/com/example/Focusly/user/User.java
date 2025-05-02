@@ -14,8 +14,8 @@ public class User {
     private String username;
     private String password;
     
-    /*New field to store user role
-    private String role;*/
+    //New field to store user role
+    private String role;
     
     @Transient
     private String confirmPassword;
@@ -24,14 +24,14 @@ public class User {
         super();
     }
 
-    public User(Long id, String name, String email_id, String username, String password/*, String role*/) {
+    public User(Long id, String name, String email_id, String username, String password, String role) {
         super();
         this.id = id;
         this.name = name;
         this.email_id = email_id;
         this.username = username;
         this.password = password;
-//        this.role = role;
+        this.role = role;
     }
 
     // Getters and Setters
@@ -76,20 +76,20 @@ public class User {
         this.password = password;
     }
 
-//    public String getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(String role) {
-//        this.role = role;
-//    }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
     
     
 
     @Override
     public String toString() {
         return "User [id=" + id + ", name=" + name + ", email_id=" + email_id + ", username=" + username + ", password="
-                + password;
+                + password+", role="+role;
     }
 
 	public String getConfirmPassword() {

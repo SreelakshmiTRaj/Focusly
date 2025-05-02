@@ -3,7 +3,11 @@ package com.example.Focusly.notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.Focusly.user.User;
+import com.example.Focusly.user.UserRepository;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -11,6 +15,10 @@ public class NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+
 
     // Send a notification to a user
     public Notification sendNotification(Long userId, String message) {
@@ -18,7 +26,9 @@ public class NotificationService {
         notification.setUserId(userId);
         notification.setMessage(message);
         notification.setTimestamp(LocalDateTime.now());
-        notification.setRead(false);  // New notifications are unread by default
+        notification.setRead(false); 
+        notification.setDeleted(false);
+        notification.setType("INFO");
         return notificationRepository.save(notification);
     }
 
@@ -36,4 +46,25 @@ public class NotificationService {
         }
         return null;
     }
+    
+    public List<Notification> sendToAll(String message, String type) {
+        List<User> users = userRepository.findAll(); // Inject UserRepository
+        List<Notification> sentNotifications = new ArrayList<>();
+
+        for (User user : users) {
+            Notification notification = new Notification();
+            notification.setUserId(user.getId());
+            notification.setMessage(message);
+            notification.setTimestamp(LocalDateTime.now());
+            notification.setRead(false);
+            notification.setDeleted(false);
+            notification.setType(type != null ? type : "INFO");
+
+            sentNotifications.add(notificationRepository.save(notification));
+        }
+
+        return sentNotifications;
+    }
+
+
 }
